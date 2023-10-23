@@ -1,0 +1,26 @@
+token:
+hostname: workspace.darwinbox.com
+
+checkin:
+  locationType: # 1 for Office, 2 for Home, 3 for Field Duty
+  message:
+  latlong:
+
+checkout:
+  locationType:
+  message:
+  latlong:
+
+scheduler:
+  checkin:
+    - 09:13
+    - 09:00
+    - 09:09
+    - 09:27
+    - 09:07
+  checkout:
+    - 17:30
+    - 17:35
+    - 17:32
+    - 17:29
+    - 17:37
