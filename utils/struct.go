@@ -25,8 +25,10 @@ type CheckOut struct{
 }
 
 type Scheduler struct{
-	CheckIn			[]string	`yaml:"checkin"`
-	CheckOut		[]string	`yaml:"checkout"`
+	CheckIn					string		`yaml:"checkin"`
+	CheckOut				string		`yaml:"checkout"`
+	// CheckInRandom			[]string	`yaml:"checkinRandom"`
+	// CheckOutRandom			[]string	`yaml:"checkoutRandom"`
 }
 
 type AppConfig struct{

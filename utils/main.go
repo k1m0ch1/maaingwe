@@ -155,12 +155,14 @@ func (a *AppConfig) GenerateConfig(hostname string) error {
 			LatLong: "",
 		},
 		Scheduler: Scheduler{
-			CheckIn: []string{
-				"09:13", "09:00", "09:09", "09:27", "09:07",
-			},
-			CheckOut: []string{
-				"17:30", "17:35", "17:32", "17:29", "17:37",
-			},
+			CheckIn: "09:00:12",
+			CheckOut: "17:30:50",
+			// CheckInRandom: []string{
+			// 	"09:13", "09:00", "09:09", "09:27", "09:07",
+			// },
+			// CheckOutRandom: []string{
+			// 	"17:30", "17:35", "17:32", "17:29", "17:37",
+			// },
 		},
 	}
 

@@ -5,6 +5,7 @@ go 1.21.3
 require (
 	github.com/carlmjohnson/requests v0.23.5
 	github.com/goccy/go-yaml v1.11.2
+	github.com/jasonlvhit/gocron v0.0.1
 )
 
 require (
