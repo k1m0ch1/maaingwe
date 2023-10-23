@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"fmt"
-	"time"
+	// "time"
 
 	"github.com/k1m0ch1/maaingwe/utils"
 	"github.com/jasonlvhit/gocron"
@@ -39,7 +39,7 @@ func doCheckOut(){
 }
 
 func checkCI(){
-	currentTime := time.Now() 
+	// currentTime := time.Now() 
 
 	fmt.Printf("[+] Running CheckIn at %s\n", darwin.Scheduler.CheckIn)
 	fmt.Printf("[+] Check date for today ")
