@@ -1,6 +1,6 @@
 # MaAingWe - Darwin box Automated CheckIn/Checkout
 
-This tools is dedicated to automted prosess checkin and checkout with scheduler
+MaAingWe from "Kumaha Aing We" (whatever I like), This tools is dedicated to automted prosess checkin and checkout with scheduler
 
 > !!Disclaimer!! use at your own risk
 
