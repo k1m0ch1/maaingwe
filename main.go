@@ -99,11 +99,11 @@ func checking(status string){
 		if status == "CheckIn"{
 			resp := doCheckIn()
 			fmt.Printf(" |  └─[?] %s\n", resp.Message)
-			fmt.Printf(" └─[+] %s Done %s\n", status)
+			fmt.Printf(" └─[+] %s Done\n", status)
 		}else if status == "CheckOut"{
 			resp := doCheckOut()
 			fmt.Printf(" |  └─[?] %s\n", resp.Message)
-			fmt.Printf(" └─[+] %s Done %s\n", status)
+			fmt.Printf(" └─[+] %s Done\n", status)
 		}else{
 			fmt.Printf(" |  └─[?] Dude what are you doing here\n")
 		}
@@ -111,15 +111,16 @@ func checking(status string){
 }
 
 func main(){
+	
 	darwin, err := darwin.Load()
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
 	}
-	
+
 	if len(os.Args) > 1 {
 		switch os.Args[1]{
 		case "login":
+			var darwin utils.AppConfig
 			if len(os.Args) < 3 {
 				fmt.Printf(" ├─[-] Please include the argument\n")
 				fmt.Printf(" └─[-] Exit the Program\n\n")
@@ -177,24 +178,22 @@ func main(){
 			fmt.Println(" ├─[+] Proceed CheckIn from config.yml")
 			resp := doCheckIn()
 			fmt.Printf(" |  └─[?] %s\n", resp.Message)
-			fmt.Printf(" └─[+] CheckIn Done %s\n")
+			fmt.Printf(" └─[+] CheckIn Done\n")
 		case "checkout":
 			fmt.Println("[+] Run Checkout")
 			fmt.Println(" ├─[+] Proceed CheckOut from config.yml")
 			resp := doCheckOut()
 			fmt.Printf(" |  └─[?] %s\n", resp.Message)
-			fmt.Printf(" └─[+] CheckOut Done %s\n")
+			fmt.Printf(" └─[+] CheckOut Done\n")
 		case "scheduler":
 			schedule := gocron.NewScheduler()
 
 			schedule.Every(1).Day().At(darwin.Scheduler.CheckIn).Do(checking, "CheckIn")
 			schedule.Every(1).Day().At(darwin.Scheduler.CheckOut).Do(checking, "CheckOut")
 
-			fmt.Printf("\nScheduler is Running at %s and %s\n",darwin.Scheduler.CheckIn,darwin.Scheduler.CheckOut)
+			fmt.Printf("\nScheduler is Running at %s for CheckIn and %s for CheckOut\n",darwin.Scheduler.CheckIn,darwin.Scheduler.CheckOut)
 			fmt.Println("Ctrl+C to Cancel")
 			<- schedule.Start()
-		default:
-			asDefault()
 		}
 	}else{
 		asDefault()
