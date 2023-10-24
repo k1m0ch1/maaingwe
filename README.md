@@ -6,6 +6,9 @@ MaAingWe from "Kumaha Aing We" (whatever I like), This tools is dedicated to aut
 
 ## How to use
 
+for the process from 1 to 5 you can see from this video
+[![Login darwinbox with maaingwe](http://img.youtube.com/vi/xbSWfFoy8fw/0.jpg)](http://www.youtube.com/watch?v=xbSWfFoy8fw "maaingwe | login")
+
 1. Login to use workspace darwinbox usually at <workspace>.darwinbox.com
 2. click Profile icon at the right top, and click menu Mobile QR Code
 3. now you only have 30 second to do this
