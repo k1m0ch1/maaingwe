@@ -10,7 +10,7 @@ MaAingWe from "Kumaha Aing We" (whatever I like), This tools is dedicated to aut
 2. click Profile icon at the right top, and click menu Mobile QR Code
 3. now you only have 30 second to do this
 4. get the string from the QR Code
-5. run `maaingwe login workspace.darwinbox.com "QRCODE STRING"`
+5. run `maaingwe login workspace.darwinbox.com` and input the decoded QR Code
 6. `config.yml` will be generated
 7. edit the `config.yml` and set the schedule time, lat long, message and location type
 8. run `maaingwe scheduler` to run the following schedule at `config.yml`
@@ -18,7 +18,7 @@ MaAingWe from "Kumaha Aing We" (whatever I like), This tools is dedicated to aut
 
 ## Available command
 
-- `maaingwe login <hostname> "<qrcode string>"`
+- `maaingwe login <hostname>`
 - `maaingwe scheduler`
 - `maaingwe checkin`
 - `maaingwe checkout`

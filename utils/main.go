@@ -15,11 +15,11 @@ func (t *Token) SetToken(token string){
 	t.Token = token
 }
 
-func setHeaders() http.Header{
+func (a *AppConfig) setHeaders() http.Header{
 	headers := make(http.Header)
 	headers.Add("Content-Type", "application/json")
 	headers.Add("User-Agent", "Dalvik/2.1.0 (Linux; U; Android 9; Redmi Note 5 MIUI/9.6.27)")
-	headers.Add("Host", "efishery.darwinbox.com")
+	headers.Add("Host", a.Hostname)
 	headers.Add("Connection", "Keep-Alive")
 
 	return headers
@@ -56,11 +56,16 @@ func (a *AppConfig) DoCheckIn() (CheckInResponse, error){
 	}
 
 	err := requests.URL("/Mobileapi/CheckInPost").
-		Headers(setHeaders()).
+		Headers(a.setHeaders()).
 		Host(a.Hostname).
 		BodyJSON(&reqCheckIn).ToJSON(&resCheckIn).
+		CheckStatus(200).
 		Fetch(context.Background())
 	if err != nil {
+		return resCheckIn, err
+	}
+
+	if requests.HasStatusErr(err, 401) {
 		return resCheckIn, err
 	}
 
@@ -87,11 +92,16 @@ func (a *AppConfig) DoCheckOut(checkInID string) (CheckInResponse, error){
 	}
 
 	err := requests.URL("/Mobileapi/CheckInPost").
-		Headers(setHeaders()).
+		Headers(a.setHeaders()).
 		Host(a.Hostname).
 		BodyJSON(&reqCheckOut).ToJSON(&resCheckOut).
+		CheckStatus(200).
 		Fetch(context.Background())
 	if err != nil {
+		return resCheckOut, err
+	}
+
+	if requests.HasStatusErr(err, 401) {
 		return resCheckOut, err
 	}
 
@@ -105,7 +115,7 @@ func (a *AppConfig) GetCheckInID() (CheckInIDResponse, error){
 	t := Token{ Token: a.Token }
 
 	err := requests.URL("/Mobileapi/LastCheckIndeatils").
-		Headers(setHeaders()).
+		Headers(a.setHeaders()).
 		Host("efishery.darwinbox.com").
 		BodyJSON(&t).ToJSON(&resCheckID).
 		Fetch(context.Background())
@@ -126,7 +136,7 @@ func (a *AppConfig) SetTokenQR(qrcode string) (AuthResponse, error){
 	}
 
 	err := requests.URL("/Mobileapi/auth").
-		Headers(setHeaders()).
+		Headers(a.setHeaders()).
 		Host("efishery.darwinbox.com").
 		BodyJSON(&req).ToJSON(&resAuth).
 		Fetch(context.Background())
@@ -141,22 +151,31 @@ func (a *AppConfig) SetTokenQR(qrcode string) (AuthResponse, error){
 }
 
 func (a *AppConfig) GenerateConfig(hostname string) error {
+	CheckInTime := a.Scheduler.CheckIn
+	CheckOutTime := a.Scheduler.CheckOut
+	if len(a.Scheduler.CheckIn) == 0{
+		CheckInTime = "09:00:12"
+	}
+	if len(a.Scheduler.CheckOut) == 0{
+		CheckOutTime = "17:30:50"
+	}
+	
 	defaultAppConfig := AppConfig {
 		Token: a.Token,
 		Hostname: hostname,
 		CheckIn: CheckInTemplate{
-			LocationType: 2,
-			Message: "",
-			LatLong: "",
+			LocationType: a.CheckIn.LocationType,
+			Message: a.CheckIn.Message,
+			LatLong: a.CheckIn.LatLong,
 		},
 		CheckOut: CheckOut{
-			LocationType: 2,
-			Message: "",
-			LatLong: "",
+			LocationType: a.CheckIn.LocationType,
+			Message: a.CheckIn.Message,
+			LatLong: a.CheckIn.LatLong,
 		},
 		Scheduler: Scheduler{
-			CheckIn: "09:00:12",
-			CheckOut: "17:30:50",
+			CheckIn: CheckInTime,
+			CheckOut: CheckOutTime,
 			// CheckInRandom: []string{
 			// 	"09:13", "09:00", "09:09", "09:27", "09:07",
 			// },
