@@ -110,6 +110,22 @@ func (a *AppConfig) DoCheckOut(checkInID string) (CheckInResponse, error){
 
 }
 
+func (a *AppConfig) GetCurrentUserProfile() (CurrentUserProfileResponse, error){
+	var resCurrentProfile CurrentUserProfileResponse
+	t := Token{ Token: a.Token }
+
+	err := requests.URL("/Mobileapi/index").
+		Headers(a.setHeaders()).
+		Host(a.Hostname).
+		BodyJSON(&t).ToJSON(&resCurrentProfile).
+		Fetch(context.Background())
+	if err != nil {
+		return resCurrentProfile, err
+	}
+
+	return resCurrentProfile, nil
+}
+
 func (a *AppConfig) GetCheckInID() (CheckInIDResponse, error){
 
 	var resCheckID CheckInIDResponse
@@ -117,7 +133,7 @@ func (a *AppConfig) GetCheckInID() (CheckInIDResponse, error){
 
 	err := requests.URL("/Mobileapi/LastCheckIndeatils").
 		Headers(a.setHeaders()).
-		Host("efishery.darwinbox.com").
+		Host(a.Hostname).
 		BodyJSON(&t).ToJSON(&resCheckID).
 		Fetch(context.Background())
 	if err != nil {
@@ -138,7 +154,7 @@ func (a *AppConfig) SetTokenQR(qrcode string) (AuthResponse, error){
 
 	err := requests.URL("/Mobileapi/auth").
 		Headers(a.setHeaders()).
-		Host("efishery.darwinbox.com").
+		Host(a.Hostname).
 		BodyJSON(&req).ToJSON(&resAuth).
 		Fetch(context.Background())
 	if err != nil {

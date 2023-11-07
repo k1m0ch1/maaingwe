@@ -48,6 +48,29 @@ func doCheckOut() utils.CheckInResponse{
 	return checkOut
 }
 
+func getProfile(){
+	fmt.Println("[+] Run check current user profile")
+	resProfile, err := darwin.GetCurrentUserProfile()
+	if err != nil{
+		fmt.Printf(" ├─[-] Can't get the current user profile\n")
+		fmt.Printf(" |  └─[?] %s\n", resProfile.Message)
+		fmt.Printf(" └─[-] Exit the Program\n")
+		fmt.Println(err)
+	}
+
+	fmt.Printf(" ├─[+] Hello %s, here is your detail\n", resProfile.UserDetails.Name)
+	fmt.Printf(" |  ├─[Email] %s\n", resProfile.UserDetails.Email)
+	fmt.Printf(" |  ├─[UserID] %s\n", resProfile.UserDetails.UserID)
+	fmt.Printf(" |  ├─[TenantID] %s\n", resProfile.UserDetails.TenantID)
+	fmt.Printf(" |  ├─[MongoID] %s\n", resProfile.UserDetails.MongoID)
+	fmt.Printf(" |  ├─[Designation] %s\n", resProfile.UserDetails.Designation)
+	fmt.Printf(" |  ├─[Department] %s at %s\n", resProfile.UserDetails.Department, resProfile.UserDetails.BusinessUnit)
+	fmt.Printf(" |  ├─[EmployeeNo] %s\n", resProfile.UserDetails.EmployeeNo)
+	fmt.Printf(" |  ├─[ManagerName] %s\n", resProfile.UserDetails.ManagerName)
+	fmt.Printf(" |  └─[Date of Join] %s\n", resProfile.UserDetails.DateOfJoin)
+	fmt.Printf(" └─[-] Detail Users Done\n")
+}
+
 type Summary struct {
 	Summary string
 }
@@ -119,8 +142,10 @@ func main(){
 
 	if len(os.Args) > 1 {
 		switch os.Args[1]{
+		case "profile":
+			getProfile()
+
 		case "login":
-			var darwin utils.AppConfig
 			if len(os.Args) < 3 {
 				fmt.Printf(" ├─[-] Please include the argument\n")
 				fmt.Printf(" └─[-] Exit the Program\n\n")
@@ -137,6 +162,7 @@ func main(){
 				fmt.Printf(" |  └─[?] %s\n", err)
 				fmt.Printf(" └─[-] Exit the Program\n")
 				fmt.Println(err)
+				os.Exit(1)
 			}
 			QRCode := line
 			Hostname := os.Args[2]
@@ -146,6 +172,7 @@ func main(){
 				fmt.Printf(" |  └─[?] %s\n", resAuth.Message)
 				fmt.Printf(" └─[-] Exit the Program\n")
 				fmt.Println(err)
+				os.Exit(1)
 			}
 
 			if resAuth.ErrorCode == 1 {
@@ -190,6 +217,8 @@ func main(){
 
 			schedule.Every(1).Day().At(darwin.Scheduler.CheckIn).Do(checking, "CheckIn")
 			schedule.Every(1).Day().At(darwin.Scheduler.CheckOut).Do(checking, "CheckOut")
+			// to makes the token alive
+			schedule.Every(1).Hour().Do(getProfile)
 
 			fmt.Printf("\nScheduler is Running at %s for CheckIn and %s for CheckOut\n",darwin.Scheduler.CheckIn,darwin.Scheduler.CheckOut)
 			fmt.Println("Ctrl+C to Cancel")
@@ -204,6 +233,7 @@ func asDefault(){
 	fmt.Println("MaAingWe - The Darwinbox Automated CheckIn/CheckOut\n")
 	fmt.Println("available command:")
 	fmt.Println("`login <Hostname>` to generate token and set to config.yml")
+	fmt.Println("`profile` to get current user profile")
 	fmt.Println("`checkin` to checkin following with message and location at config.yml")
 	fmt.Println("`checkout` to checkout following with message and location at config.yml")
 	fmt.Println("`scheduler` to schedule following with schedule rule at config.yml")
